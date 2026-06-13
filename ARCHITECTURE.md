@@ -31,3 +31,7 @@
 
 ## ⚡ 5. BACKEND CACHE ACCELERATOR
 - `\App\Services\CacheService::boot()` -> Decoupled infrastructure gateway executing at bootstrap. Automatically sniffs environmental variables to map high-speed in-memory database connections (`Redis` or `Memcached`) into the Core Registry container under the handler name `cache_engine`. Gracefully falls back to filesystem if services are disconnected.
+
+## 🎨 6. FRONTEND LAYOUT INHERITANCE (Smarty Engine)
+- **Base Scaffold Layout**: `templates/layout.tpl` (Contains shared Global Meta, Apple Web App PWA Manifest, CSS, Icons, Dynamic Global Header, fixed Footer, and the Multilingual Language Switcher loop).
+- **Child Implementation**: Child modules or views extend the base skeleton cleanly via `{extends file='layout.tpl'}` and override the specific dynamic area inside the `{block name="content"}` wrapper wrapper to reduce layout duplication.
