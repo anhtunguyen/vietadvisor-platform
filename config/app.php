@@ -45,6 +45,7 @@ return [
      */
     'env'   => $_ENV['APP_ENV'] ?? 'production',
     'debug' => !$isProduction,
+    'static_extensions' => trim($_ENV['STATIC_EXTENSIONS'] ?? 'css|js|gif|jpeg|jpg|png|svg|webp|ico|webmanifest'),
 
     /**
      * 2. Thông tin Tên miền & Danh sách trắng Máy chủ (Domain Configuration)
@@ -121,5 +122,15 @@ return [
             'client_secret' => $_ENV['GOOGLE_CLIENT_SECRET'] ?? '',
             'redirect_url'  => $_ENV['GOOGLE_REDIRECT_URL'] ?? '',
         ]
-    ]
+    ],
+
+    /**
+     * 7. Cấu hình hệ thống tường lửa chống Flood Site (Rate Limiting Configuration)
+     */
+    'rate_limit' => [
+        'max_requests_get'   => (int)($_ENV['RATE_LIMIT_MAX_GET'] ?? 60),
+        'max_requests_write' => (int)($_ENV['RATE_LIMIT_MAX_WRITE'] ?? 5),
+        'time_window'        => (int)($_ENV['RATE_LIMIT_WINDOW'] ?? 10),
+        'block_duration'     => (int)($_ENV['RATE_LIMIT_BLOCK'] ?? 300),
+    ],
 ];

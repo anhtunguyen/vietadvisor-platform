@@ -76,9 +76,15 @@ if (!empty($_ENV['APP_ASSETS_DOMAIN'])) {
 // Lớp SessionGuard tự động phân tách cờ hiệu :1 / :0 và xử lý bẫy lỗi khóa cứng máy chủ
 SessionGuard::initialize();
 
+// 🔥 SIÊU TIN GỌN: Tự động nhận diện môi trường .env để kích nổ cổng RAM kết nối (Redis/Memcached)
+\App\Services\CacheService::boot();
+
 // ==============================================================================
 // 🛡️ 10. KÍCH HOẠT VÒNG PHÒNG THỦ MÁY CHỦ CHỦ ĐỘNG (MẠNG LƯỚI SONG SONG)
 // ==============================================================================
+// Lớp -1: Chặn đứng IP flood site siêu tốc bằng thuật toán Khung thời gian động
+\App\Security\RateLimiter::check();
+
 // Lớp 0: Chặn đứng lập tức nếu IP nằm trong danh sách đen động từ file JSON (Quét siêu tốc)
 Guard::validateIpBlacklist();
 

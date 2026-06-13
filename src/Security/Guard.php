@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Security;
 
 use App\App;
@@ -12,47 +13,47 @@ if (!defined('EXECUTION_ALLOWED')) {
     exit;
 }
 
-class Guard {
+class Guard
+{
     /**
      * Vòng phòng thủ 0: Kiểm tra chốt chặn danh sách đen IP (IP Blacklist Checker)
-     * Chặn đứng lập tức các IP đơn lẻ hoặc dải mạng (Mask) cấu hình dynamic qua file JSON.
+     * Đmanager: Đã nâng cấp cơ chế tự động giải phóng IP phạt có thời hạn (Auto-Unban)
      */
-    public static function validateIpBlacklist(): void {
+    public static function validateIpBlacklist(): void
+    {
         $request = App::request();
         $currentIp = $request->getClientIp();
 
-        if (empty($currentIp)) {
+        if (empty($currentIp) || $currentIp === '::1' || $currentIp === '127.0.0.1') {
             return;
         }
 
-        // Đường dẫn tới tệp tin blacklist JSON biệt lập
+        // 🔥 CHỐT CHẶN A: KIỂM TRA DANH SÁCH PHẠT TẠM THỜI TỰ ĐỘNG MỞ KHÓA
+        $tempBanFile = ROOT_DIR . '/templates/templates_c/cache/temporary_banned_ips.json';
+        if (is_file($tempBanFile)) {
+            $banList = json_decode(@file_get_contents($tempBanFile), true) ?? [];
+
+            if (isset($banList[$currentIp])) {
+                // Nếu mốc thời gian giải phóng lớn hơn thời gian hiện tại -> Vẫn đang bị phạt
+                if ($banList[$currentIp] > time()) {
+                    \App\Security\ErrorHandler::renderErrorPage(403, 'Forbidden');
+                } else {
+                    // Đã quá giờ phạt -> Hệ thống tự động xóa IP này ra khỏi danh sách đen ngầm để dọn rác
+                    unset($banList[$currentIp]);
+                    @file_put_contents($tempBanFile, json_encode($banList));
+                }
+            }
+        }
+
+        // CHỐT CHẶN B: KIỂM TRA DANH SÁCH ĐEN CỐ ĐỊNH (Chỉ dùng cho IP Hacker thực sự do Admin chủ động khóa)
         $blacklistFile = ROOT_DIR . '/config/ip_blacklist.json';
-        $blacklist = [];
-
-        // Kiểm tra xem file có tồn tại hay không trước khi đọc ổ cứng để chống sập lây lan
         if (is_file($blacklistFile)) {
-            $jsonContent = @file_get_contents($blacklistFile);
-            if (!empty($jsonContent)) {
-                $blacklist = json_decode($jsonContent, true) ?? [];
-            }
-        }
-
-        if (empty($blacklist) || !is_array($blacklist)) {
-            return;
-        }
-
-        // Thực hiện vòng lặp so khớp thuật toán Bitwise tối ưu hiệu năng
-        foreach ($blacklist as $blockedIp) {
-            $blockedIp = trim($blockedIp);
-            
-            // Trường hợp 1: So khớp trực tiếp nếu cấu hình là IP đơn lẻ
-            if ($currentIp === $blockedIp) {
-                \App\Security\ErrorHandler::renderErrorPage(403, 'Forbidden');
-            }
-
-            // Trường hợp 2: So khớp dải mạng CIDR Mask (Ví dụ: 192.168.1.0/24)
-            if (strpos($blockedIp, '/') !== false) {
-                if (self::checkIpInCidr($currentIp, $blockedIp)) {
+            $blacklist = json_decode(@file_get_contents($blacklistFile), true) ?? [];
+            foreach ($blacklist as $blockedIp) {
+                if ($currentIp === trim($blockedIp)) {
+                    \App\Security\ErrorHandler::renderErrorPage(403, 'Forbidden');
+                }
+                if (strpos($blockedIp, '/') !== false && self::checkIpInCidr($currentIp, $blockedIp)) {
                     \App\Security\ErrorHandler::renderErrorPage(403, 'Forbidden');
                 }
             }
@@ -63,7 +64,8 @@ class Guard {
      * Vòng phòng thủ 1: Xác thực tên miền (Host Header Validation)
      * Chặn đứng hoàn toàn lỗ hổng Host Header Injection và các kết nối lậu.
      */
-    public static function validateHost(): void {
+    public static function validateHost(): void
+    {
         $request = App::request();
         $host = $request->getHost();
         $config = require ROOT_DIR . '/config/app.php';
@@ -72,7 +74,7 @@ class Guard {
         if (!in_array($host, $allowedHosts)) {
             $scheme = $request->isSecure() ? 'https://' : 'http://';
             $baseDomain = $config['domain'] ?? 'localhost';
-            
+
             $redirect = new RedirectResponse($scheme . $baseDomain, 301);
             $redirect->send();
             exit;
@@ -83,7 +85,8 @@ class Guard {
      * Vòng phòng thủ 1.5: Kiểm soát tiêu đề người giới thiệu (Strict Referer Blocker)
      * Chống tấn công giả mạo CSRF và ngăn chặn hành vi hút trộm băng thông hình ảnh (Anti-Hotlinking).
      */
-    public static function validateReferer(): void {
+    public static function validateReferer(): void
+    {
         $request = App::request();
         $referer = $request->headers->get('Referer');
 
@@ -104,7 +107,7 @@ class Guard {
         // 🛡️ CHỐT CHẶN A: CHỐNG GIẢ MẠO YÊU CẦU TRÊN CÁC HÀNH ĐỘNG THAY ĐỔI DỮ LIỆU (CSRF PROTECT)
         // Nếu khách thực hiện gửi Form (POST, PUT, DELETE) nhưng link bắt nguồn từ một site bên ngoài
         if (in_array($request->getMethod(), ['POST', 'PUT', 'DELETE'], true) && !$isInternalReferer) {
-            
+
             // Nếu có cấu hình CORS cấp phép đối tác bên thứ ba (Có truyền Token Bearer hợp lệ) -> Cho phép thông quan
             $authToken = $request->headers->get('Authorization');
             if (empty($authToken)) {
@@ -114,7 +117,11 @@ class Guard {
 
         // 🛡️ CHỐT CHẶN B: CHỐNG TRÍCH XUẤT HOTLINKING ẢNH TỪ BÊN NGOÀI
         $path = trim($request->getRequestUri(), '/');
-        if (preg_match('/\.(gif|jpe?g|png|svg|webp|ico)$/i', $path) && !$isInternalReferer) {
+        // Gọi lại chính xác cấu hình tệp tĩnh dùng chung
+        $staticExts = $config['static_extensions'] ?? 'css|js|gif|jpeg|jpg|png|svg|webp|ico|webmanifest';
+
+        // Bảo vệ toàn diện không chỉ file ảnh mà cả font chữ, tài liệu pdf cấu hình từ .env
+        if (preg_match('/\.(' . $staticExts . ')$/i', $path) && !$isInternalReferer) {
             header(($_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.1') . ' 403 Forbidden');
             echo 'Hotlinking is disabled for this resource.';
             exit;
@@ -125,13 +132,14 @@ class Guard {
      * Vòng phòng thủ 3: Điều hướng khách truy cập lần đầu (Onboarding) tối giản tuyệt đối
      * Thuật toán: Check Cookie -> Gán Cookie ngay -> Kiểm tra Raw URL -> Tính toán điều hướng
      */
-    public static function handleOnboarding(): void {
+    public static function handleOnboarding(): void
+    {
         $request = App::request();
         $host = $request->getHost();
-        
+
         $config = require ROOT_DIR . '/config/app.php';
         $baseDomain = $config['domain'] ?? 'localhost';
-        
+
         // Lấy tên cookie ngôn ngữ đã được xử lý tiền tố __Secure- động từ tệp cấu hình app.php (:1 / :0)
         $cookieLangName = $config['localization']['cookie_lang_name'] ?? 'va_lng';
 
@@ -208,23 +216,26 @@ class Guard {
     /**
      * Hàm tính toán toán học Bitwise đối chiếu IP thực tế với dải Subnet Mask (Hỗ trợ cả IPv4 và IPv6)
      */
-    private static function checkIpInCidr(string $ip, string $cidr): bool {
+    private static function checkIpInCidr(string $ip, string $cidr): bool
+    {
         [$subnet, $mask] = explode('/', $cidr);
-        
+
         // Xử lý toán học cho dải mạng IPv4
         if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
             $ipLong = ip2long($ip);
             $subnetLong = ip2long($subnet);
-            $maskInvert = ~( (1 << (32 - (int)$mask)) - 1 );
-            
+            $maskInvert = ~((1 << (32 - (int)$mask)) - 1);
+
             return ($ipLong & $maskInvert) === ($subnetLong & $maskInvert);
         }
-        
+
         // Xử lý toán học băm chuỗi nhị phân cho dải mạng IPv6 thế hệ mới
         if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             $ipBin = inet_pton($ip);
             $subnetBin = inet_pton($subnet);
-            if (!$ipBin || !$subnetBin) return false;
+            if (!$ipBin || !$subnetBin) {
+                return false;
+            }
 
             $maskBits = (int)$mask;
             $bytes = floor($maskBits / 8);
@@ -237,11 +248,11 @@ class Guard {
             if ($bits > 0) {
                 $ipByte = ord($ipBin[$bytes]);
                 $subnetByte = ord($subnetBin[$bytes]);
-                $maskByte = ~( (1 << (8 - $bits)) - 1 ) & 255;
-                
+                $maskByte = ~((1 << (8 - $bits)) - 1) & 255;
+
                 return ($ipByte & $maskByte) === ($subnetByte & $maskByte);
             }
-            
+
             return true;
         }
 
