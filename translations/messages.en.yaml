@@ -1,0 +1,43 @@
+# ==============================================================================
+# 🇬🇧 VIETADVISOR PLATFORM - LOCALIZATION DICTIONARY (ENGLISH - ROOT GLOBAL)
+# ==============================================================================
+
+# Phân khu 1: Giao diện Trang chủ & Điều phối tổng (Homepage & Navigation)
+homepage_welcome: "Welcome to VietAdvisor!"
+home_page_title: "VietAdvisor - Expert Advisory & Expat Community Platform"
+homepage_subtitle: "The interconnectivity expert network and comprehensive ecosystem solutions for expats."
+switch_language: "Switch language"
+
+# Phân khu 2: Khối giới thiệu nền tảng (About Us Component)
+about_us_title: "About Us"
+about_us_desc: "VietAdvisor is an advanced platform facilitating professional matching, delivering deep market analytical data, and providing localized services tailored specifically for the expat community."
+read_more: "Read more"
+
+# Phân khu 3: Quản lý hiển thị bài viết Module Insights (Insights Content Display)
+latest_news: "Latest News"
+articles_found: "{0} There are currently no articles published in this section.|{1} 1 article has been published in this section.|]1,Inf] There are currently %count% articles published in this section."
+
+# Phân khu 4: Phân hệ tài khoản và đăng nhập (Authentication UX)
+account_zone: "Account Dashboard"
+account_zone_desc: "Access your dashboard to manage advisor profiles or interact deeply with the expat community."
+login_btn: "Login Now"
+
+# ==============================================================================
+# 🛡️ PHÂN KHU 5: BIỂU MẪU CẢNH BÁO TRANG LỖI HỆ THỐNG (CORE SYSTEM ERRORS)
+# ==============================================================================
+error_403_title: "Access Denied"
+error_403_desc: "You do not have permission to access this area. Automated scraping utilities or unauthenticated sessions are strictly restricted according to our technical security policies."
+
+error_404_title: "Page Not Found"
+error_404_desc: "The link you accessed may be broken, removed, or has been redirected to another corresponding localized language subdomain. Please verify the URL layout."
+
+error_500_title: "Internal Server Error"
+error_500_desc: "Our engineering operations team has been automatically notified. We are aggressively optimizing the infrastructure to resolve this malfunction. Please try again later."
+
+return_homepage: "Return Homepage"
+
+# ==============================================================================
+# 📊 PHÂN KHU 6: QUẢN LÝ BIẾN ĐẾM SỐ NHIỀU CHUẨN SYMFONY (PLURALIZATION ACCESSIBILITY)
+# ==============================================================================
+# Cú pháp chia 2 khoảng nhị phân: {1} cho số ít và các dải số còn lại lọt vào ]1,Inf]
+active_advisors_count: "{1} %count% advisor is online|[-Inf,0] %count% advisors are online|]1,Inf] %count% advisors are online"

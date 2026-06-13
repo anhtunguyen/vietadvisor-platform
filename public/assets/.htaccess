@@ -1,0 +1,35 @@
+# Đường dẫn tệp tin: public/assets/.htaccess
+
+# 1. Bật công cụ kiểm tra chuỗi định tuyến
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # 🧬 BIỆN PHÁP CHỐNG HOTLINKING HÌNH ẢNH TẦNG HẠ TẦNG TĨNH
+    # Điều kiện 1: Request có chứa tiêu đề người giới thiệu (Referer không trống)
+    RewriteCond %{HTTP_REFERER} !^$
+    
+    # Điều kiện 2: Tên miền giới thiệu KHÔNG PHẢI là vietadvisor.test và KHÔNG PHẢI các subdomain của nó
+    # Ký tự s? giúp bao phủ cả giao thức http và https bảo mật
+    RewriteCond %{HTTP_REFERER} !^https?://(.*\.)?vietadvisor\.test [NC]
+    
+    # Điều kiện 3: Tên miền giới thiệu KHÔNG PHẢI là chính tên miền CDN/Assets của bạn
+    RewriteCond %{HTTP_REFERER} !^https?://(.*\.)?vietadvisor-assets\.test [NC]
+    
+    # 🔥 HÀNH ĐỘNG CHẶN: Nếu vi phạm tất cả điều kiện trên mà cố tình gọi file ảnh (gif, jpg, png, webp)
+    # Hệ thống lập tức trả về lỗi mạng 403 Forbidden thẳng thừng, bẻ gãy hành vi hút trộm băng thông
+    RewriteRule \.(gif|jpe?g|png|svg|webp|ico)$ - [F,L]
+</IfModule>
+
+# 2. Cấp quyền truy cập công khai cho các file còn lại (css, js)
+Require all granted
+
+# 3. Phân khu gán quyền CORS Headers cho CDN
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, OPTIONS"
+    Header set Access-Control-Allow-Credentials "false"
+    
+    RequestHeader unset Cookie
+    Header unset Set-Cookie
+    Header set Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable"
+</IfModule>

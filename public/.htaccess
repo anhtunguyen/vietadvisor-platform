@@ -1,0 +1,32 @@
+# ==============================================================================
+# 🚪 VIETADVISOR PLATFORM - APACHE SERVER CONFIGURATION (.HTACCESS GẮN TẠI PUBLIC)
+# ==============================================================================
+
+# 1. Bật hỏa lực công cụ viết lại đường dẫn (Pretty URLs)
+RewriteEngine On
+
+# 2. Chặn tuyệt đối hành vi duyệt thư mục tự do
+Options -Indexes
+
+# 3. Chống tấn công giả mạo giao diện Clickjacking bằng cách chặn chèn iframe từ site lạ
+Header set X-Frame-Options "SAMEORIGIN"
+
+# 4. Kích hoạt màng lọc bảo mật XSS trực tiếp trên trình duyệt của khách
+Header set X-XSS-Protection "1; mode=block"
+
+# ==============================================================================
+# 🎛️ HỆ THỐNG ĐIỀU PHỐI ĐỊNH TUYẾN TẬP TRUNG (ROUTER ACCESSIBILITY)
+# ==============================================================================
+# 5. Nếu đường dẫn truy cập là một thư mục vật lý có thật, bỏ qua không rewrite
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# 6. Nếu đường dẫn truy cập là một file tài nguyên vật lý có thật, bỏ qua không rewrite
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# 7. Khóa chốt cứu nguy Favicon: Nếu thiếu file favicon, trả về 404 thẳng, cấm chuyển hướng
+RewriteRule ^favicon\.ico$ - [R=404,L]
+
+# 8. Gom toàn bộ các request không có thật còn lại gửi về file index.php xử lý trung tâm
+RewriteRule ^ index.php [L]

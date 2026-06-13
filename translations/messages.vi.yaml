@@ -1,0 +1,44 @@
+# ==============================================================================
+# 🇻🇳 VIETADVISOR PLATFORM - LOCALIZATION DICTIONARY (VIETNAMESE)
+# ==============================================================================
+
+# Phân khu 1: Giao diện Trang chủ & Điều phối tổng (Homepage & Navigation)
+homepage_welcome: "Chào mừng tới VietAdvisor!"
+home_page_title: "VietAdvisor - Sàn Tư Vấn Chuyên Gia & Cộng Đồng Người Nước Ngoài"
+homepage_subtitle: "Hệ thống kết nối kiến trúc chuyên gia và giải pháp toàn diện cho người nước ngoài."
+switch_language: "Thay đổi ngôn ngữ"
+
+# Phân khu 2: Khối giới thiệu nền tảng (About Us Component)
+about_us_title: "Về chúng tôi"
+about_us_desc: "VietAdvisor là nền tảng tối tân hỗ trợ kết nối, cung cấp các phân tích thị trường chuyên sâu và hệ sinh thái tiện ích dành riêng cho cộng đồng expats."
+read_more: "Đọc thêm"
+
+# Phân khu 3: Quản lý hiển thị bài viết Module Insights (Insights Content Display)
+latest_news: "Tin tức mới nhất"
+# Thay thế từ khóa cũ bằng từ khóa khẳng định mới
+articles_found: "{0} Hiện chưa có bài viết nào được xuất bản tại phân hệ này.|[1,Inf] Hiện đã có %count% bài viết được xuất bản tại phân hệ này."
+
+# Phân khu 4: Phân hệ tài khoản và đăng nhập (Authentication UX)
+account_zone: "Khu vực tài khoản"
+account_zone_desc: "Đăng nhập hệ thống để quản lý hồ sơ chuyên gia hoặc kết nối sâu với cộng đồng."
+login_btn: "Đăng nhập ngay"
+
+# ==============================================================================
+# 🛡️ PHÂN KHU 5: BIỂU MẪU CẢNH BÁO TRANG LỖI HỆ THỐNG (CORE SYSTEM ERRORS)
+# ==============================================================================
+error_403_title: "Truy cập bị từ chối"
+error_403_desc: "Bạn không có quyền truy cập vào khu vực này. Các công cụ thu thập dữ liệu tự động hoặc các phiên truy cập chưa được cấp quyền đều bị hạn chế nghiêm ngặt theo chính sách bảo mật."
+
+error_404_title: "Không tìm thấy trang"
+error_404_desc: "Đường dẫn bạn truy cập có thể đã bị hỏng, bị xóa bỏ hoặc đã được chuyển vùng điều hướng sang một subdomain ngôn ngữ khác. Vui lòng kiểm tra lại URL."
+
+error_500_title: "Đã xảy ra lỗi hệ thống"
+error_500_desc: "Đội ngũ kỹ thuật của chúng tôi đã được thông báo tự động. Chúng tôi đang tiến hành tối ưu hóa hạ tầng để khắc phục sự cố này. Vui lòng thử lại sau."
+
+return_homepage: "Về trang chủ"
+
+# ==============================================================================
+# 📊 PHÂN KHU 6: QUẢN LÝ BIẾN ĐẾM SỐ NHIỀU CHUẨN SYMFONY (PLURALIZATION ACCESSIBILITY)
+# ==============================================================================
+# Sử dụng dải đếm {0,Inf} và bọc biến đếm bằng ký tự %count% chuẩn hóa
+active_advisors_count: "[0,Inf] %count% chuyên gia đang trực tuyến"

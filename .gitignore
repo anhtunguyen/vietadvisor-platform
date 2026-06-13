@@ -1,0 +1,23 @@
+# ==============================================================================
+# 🧼 GIT IGNORE FILTER - VIETADVISOR PLATFORM SYSTEM
+# ==============================================================================
+
+# 1. Khóa chặt file chứa mật khẩu mật và cấu hình môi trường nhạy cảm
+.env
+
+# 2. Bỏ qua toàn bộ thư mục thư viện bên thứ ba của Composer (Kéo lại qua lệnh cài đặt)
+/vendor/
+
+# 3. Bỏ qua các thư mục lưu đệm sinh tự động và file log lỗi hệ thống
+/templates/templates_c/*
+!/templates/templates_c/.gitkeep
+
+# Bỏ qua các file log thô cụ thể
+*.log
+
+# 4. Bỏ qua các file cấu hình tạm của hệ điều hành và trình soạn thảo code (IDE)
+.id/
+.vscode/
+.idea/
+Th Thumbs.db
+Desktop.ini

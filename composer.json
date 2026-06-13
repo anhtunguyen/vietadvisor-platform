@@ -1,0 +1,38 @@
+{
+    "name": "vietadvisor/core",
+    "description": "Viet Advisor Platform - Ultimate Modern Full Framework for PHP 8.1+",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "bramus/router": "~1.6",
+        "smarty/smarty": "^4.5",
+        "symfony/translation": "^6.4",
+        "symfony/config": "^6.4",
+        "symfony/http-foundation": "^6.4",
+        "symfony/string": "^6.4",
+        "symfony/cache": "^6.4",
+        "vlucas/phpdotenv": "^5.6",
+        "illuminate/database": "^10.0",
+        "defuse/php-encryption": "^2.4",
+        "voku/anti-xss": "^4.1",
+        "phpmailer/phpmailer": "^6.9",
+        "monolog/monolog": "^3.5",
+        "intervention/image": "^3.5",
+        "guzzlehttp/guzzle": "^7.8",
+        "league/oauth2-google": "^4.0",
+        "endroid/qr-code": "^5.0",
+        "spipu/html2pdf": "^5.2",
+        "geoip2/geoip2": "~3.0",
+        "firebase/php-jwt": "^7.1",
+        "symfony/yaml": "^7.4",
+        "whichbrowser/parser": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        },
+        "files": [
+            "src/Helpers/functions.php"
+        ]
+    }
+}

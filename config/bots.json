@@ -1,0 +1,32 @@
+{
+  "categories": {
+    "good": [
+      "Googlebot",
+      "Bingbot",
+      "YandexBot",
+      "Baiduspider"
+    ],
+    "bad": [
+      "PetalBot",
+      "MJ12bot",
+      "Crawlera",
+      "Scrapy",
+      "python-requests",
+      "Go-http-client",
+      "AhrefsBot",
+      "SemrushBot",
+      "DotBot"
+    ]
+  },
+  "whitelist": {
+    "google": ["googlebot.com", "google.com"],
+    "bing": ["://msn.com"],
+    "yandex": ["yandex.ru", "yandex.net", "yandex.com"],
+    "baidu": ["baidu.com", "baidu.jp"]
+  },
+  "access_control": {
+    "public": ["good"],
+    "api": ["good"],
+    "admin": []
+  }
+}
