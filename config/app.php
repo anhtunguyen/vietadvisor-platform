@@ -45,14 +45,13 @@ return [
      */
     'env'   => $_ENV['APP_ENV'] ?? 'production',
     'debug' => !$isProduction,
-    'static_extensions' => trim($_ENV['STATIC_EXTENSIONS'] ?? 'css|js|gif|jpeg|jpg|png|svg|webp|ico|webmanifest'),
+    'static_extensions' => trim($_ENV['STATIC_EXTENSIONS'] ?? 'css|js|gif|jpeg|jpg|png|svg|webp|ico|webmanifest|woff|woff2|ttf|eot|pdf|mp4|webm'),
 
     /**
      * 2. Thông tin Tên miền & Danh sách trắng Máy chủ (Domain Configuration)
      */
     'domain'        => $_ENV['APP_DOMAIN'] ?? 'vietadvisor.test',
     'allowed_hosts' => explode(',', $_ENV['ALLOWED_HOSTS'] ?? 'localhost'),
-    // 🔥 BỔ SUNG DÒNG NÀY: Chuẩn hóa chuỗi đường dẫn admin từ file .env
     'admin_path'    => trim($_ENV['ADMIN_PATH'] ?? 'admin', '/'),
 
     /**
@@ -92,11 +91,14 @@ return [
         // Nhóm A: Tên Cookie định danh Session nhạy cảm (Cấu hình mang cờ hiệu :1 từ .env)
         'session_name'  => $parseCookieConfig($_ENV['COOKIE_SESSION_NAME'] ?? null, 'va_session'),
 
+        // 🔥 NHÓM BẢO MẬT CAO CẤP: Tự động phân tách tên cho Cookie "Remember Me" mang cờ hiệu :1
+        'remember_name' => $parseCookieConfig($_ENV['COOKIE_REMEMBER_NAME'] ?? null, 'va_rem'),
+
         // Nhóm B: Danh sách các Cookie tiện ích Front-end (Luôn giữ tên thô sạch do mang cờ hiệu :0)
         'cookies_ux' => [
             'theme'    => $parseCookieConfig($_ENV['COOKIE_THEME_NAME'] ?? null, 'va_theme'),
             'popup'    => $parseCookieConfig($_ENV['COOKIE_POPUP_NAME'] ?? null, 'va_popup'),
-            'timezone' => $parseCookieConfig($_ENV['COOKIE_TIMEZONE_NAME'] ?? null, 'va_tz'), // Đồng bộ Cookie múi giờ động
+            'timezone' => $parseCookieConfig($_ENV['COOKIE_TIMEZONE_NAME'] ?? null, 'va_tz'), 
         ]
     ],
 
