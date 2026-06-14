@@ -97,6 +97,9 @@ Guard::validateReferer();
 // Lớp 0.4: 🔥 ĐÃ KHỬ PHÌNH TO: Gọi lệnh gọn gàng, BotManager tự động bóc tách phân vùng bảo mật
 \App\Security\BotManager::validate();
 
+// Lớp 0.45: 🔥 BỔ SUNG DÒNG NÀY: Màng lọc phân quyền một cửa toàn sàn (RBAC Gate)
+\App\Security\AccessGate::watch();
+
 // Lớp 0.5: Quét dấu vết Open Proxy lậu độc hại (Cấu hình linh hoạt bật/tắt qua .env)
 SessionGuard::validateProxy();
 

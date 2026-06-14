@@ -22,6 +22,9 @@ class HomeController extends ModuleHomeController
      */
     public function index(): void
     {
+        // 🔥 KÍCH NỔ TẠM THỜI: Bỏ dấu comment dòng dưới để chạy khởi tạo Database tự động, xong thì khóa lại
+        // \App\Services\DatabaseBuilder::run();
+
         // Giả lập số lượng bài viết hiện tại lấy từ hệ thống
         $articlesCount = 26;
 

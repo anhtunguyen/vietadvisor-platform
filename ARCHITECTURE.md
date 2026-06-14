@@ -35,3 +35,7 @@
 ## 🎨 6. FRONTEND LAYOUT INHERITANCE (Smarty Engine)
 - **Base Scaffold Layout**: `templates/layout.tpl` (Contains shared Global Meta, Apple Web App PWA Manifest, CSS, Icons, Dynamic Global Header, fixed Footer, and the Multilingual Language Switcher loop).
 - **Child Implementation**: Child modules or views extend the base skeleton cleanly via `{extends file='layout.tpl'}` and override the specific dynamic area inside the `{block name="content"}` wrapper wrapper to reduce layout duplication.
+
+## 🗄️ 7. DATABASE STRUCTURE & AUTOMATION ENGINE
+- **Schema Blueprints**: Managed via `database/migrations.sql` and `database/seeders.sql` supporting decoupled multilingual split translations.
+- **Automation Service**: Triggered safely via `\App\Services\DatabaseBuilder::run()` using core PDO registry integration.
