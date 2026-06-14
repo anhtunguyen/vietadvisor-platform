@@ -1,26 +1,29 @@
 {
-  "zones": {
-    "admin": {
-      "allowed_roles": ["admin"],
-      "fallback_route": "auth/login",
-      "error_type": "404"
+    "super_admins": [
+        1
+    ],
+    "zones": {
+        "admin": {
+            "required_permission": "access_admin_dashboard",
+            "fallback_route": "auth/login",
+            "error_type": "404"
+        },
+        "api/v1/private": {
+            "required_permission": "access_private_api",
+            "fallback_route": "api/v1/error/403",
+            "error_type": "json"
+        }
     },
-    "api/v1/private": {
-      "allowed_roles": ["admin", "advisor", "expat"],
-      "fallback_route": "api/v1/error/403",
-      "error_type": "json"
+    "modules": {
+        "Advisors\\Controllers\\AdminController": {
+            "required_permission": "manage_advisors",
+            "fallback_route": "auth/login",
+            "error_type": "403"
+        },
+        "Insights\\Controllers\\AdminController": {
+            "required_permission": "manage_insights",
+            "fallback_route": "auth/login",
+            "error_type": "403"
+        }
     }
-  },
-  "modules": {
-    "Advisors\\Controllers\\DashboardController": {
-      "allowed_roles": ["advisor", "admin"],
-      "fallback_route": "auth/login",
-      "error_type": "403"
-    },
-    "Expats\\Controllers\\ProfileController": {
-      "allowed_roles": ["expat", "admin"],
-      "fallback_route": "auth/login",
-      "error_type": "403"
-    }
-  }
 }

@@ -20,11 +20,13 @@ CREATE TABLE `users` (
     `email` VARCHAR(191) NOT NULL UNIQUE,
     `password` VARCHAR(255) NOT NULL,
     `role` ENUM('expat', 'advisor', 'admin') NOT NULL DEFAULT 'expat',
+    -- 🔥 BỔ SUNG DÒNG NÀY: Lưu mảng đặc quyền dạng JSON (Ví dụ: ["access_admin_dashboard", "manage_insights"])
+    `permissions` JSON NULL, 
     `status` ENUM('pending', 'active', 'suspended') NOT NULL DEFAULT 'pending',
     `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX `idx_users_role_status` (`role`, `status`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 3. Khởi tạo Bảng thông số kỹ thuật Chuyên gia
 CREATE TABLE `advisors` (

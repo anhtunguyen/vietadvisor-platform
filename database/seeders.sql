@@ -3,9 +3,13 @@
 -- ==============================================================================
 
 -- 1. Nạp tài khoản người dùng mẫu (Mật khẩu giả lập đã mã hóa bcrypt cho '123456')
-INSERT INTO `users` (`id`, `email`, `password`, `role`, `status`) VALUES
-(1, 'admin@vietadvisor.com', '$2y$10$I0bKjUvR4G8W6Fz2V3eC.e8mK6Zp9zQY6M8bV7c8d9e0f1a2b3c4d', 'admin', 'active'),
-(2, 'ivan.lawyer@vietadvisor.com', '$2y$10$I0bKjUvR4G8W6Fz2V3eC.e8mK6Zp9zQY6M8bV7c8d9e0f1a2b3c4d', 'advisor', 'active');
+INSERT INTO `users` (`id`, `email`, `password`, `role`, `permissions`, `status`) VALUES
+-- Admin Tối Cao (Cấp full quyền, định danh qua mảng hoặc whitelist ID)
+(1, 'superadmin@vietadvisor.com', '$2y$10$I0bKjUvR4G8W6Fz2V3eC.e8mK6Zp9zQY6M8bV7c8d9e0f1a2b3c4d', 'admin', '["access_admin_dashboard", "manage_all"]', 'active'),
+-- Advisor mẫu
+(2, 'ivan.lawyer@vietadvisor.com', '$2y$10$I0bKjUvR4G8W6Fz2V3eC.e8mK6Zp9zQY6M8bV7c8d9e0f1a2b3c4d', 'advisor', NULL, 'active'),
+-- Admin Tiểu Khu (Chỉ được duyệt tin tức, không được sờ vào thông tin Chuyên gia)
+(3, 'insight.admin@vietadvisor.com', '$2y$10$I0bKjUvR4G8W6Fz2V3eC.e8mK6Zp9zQY6M8bV7c8d9e0f1a2b3c4d', 'admin', '["access_admin_dashboard", "manage_insights"]', 'active');
 
 -- 2. Nạp hồ sơ kỹ thuật Chuyên gia
 INSERT INTO `advisors` (`id`, `user_id`, `avatar`, `phone`, `rating`, `is_verified`, `speak_russian`, `speak_english`, `speak_vietnamese`) VALUES
