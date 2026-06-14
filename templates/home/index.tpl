@@ -30,7 +30,7 @@
         <h2>{trans key="account_zone"}</h2>
         <p>{trans key="account_zone_desc"}</p>
         <a href="{$smarty.const.ROOT_URL}auth/login" style="display:inline-block; background:#0056b3; color:white; padding:10px 20px; border-radius:4px; text-decoration:none;">
-            {trans key="login_btn"}
+            {trans key="login_cta_btn"}
         </a>
     </div>
 </div>

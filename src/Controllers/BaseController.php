@@ -83,7 +83,7 @@ abstract class BaseController
         $config = require ROOT_DIR . '/config/app.php';
         $isDebug = $config['debug'] ?? true;
 
-        // 🧬 ĐỒNG BỘ ĐỘNG CHỐT CHẶN CACHE: 
+        // 🧬 ĐỒNG BỘ ĐỘNG CHỐT CHẶN CACHE:
         // Nếu là Dev -> Trả về null (Tắt cache). Nếu là Prod -> Lưu vào thư mục templates_c/cache/translations
         $cacheDir = $isDebug ? null : ROOT_DIR . '/templates/templates_c/cache/translations';
 
@@ -136,7 +136,6 @@ abstract class BaseController
         // Đăng ký Múi giờ đang hoạt động vào Core Registry để sử dụng ở các phân hệ khác
         App::bind('current_timezone', (object)['name' => date_default_timezone_get()]);
     }
-
     /**
      * Thiết lập cấu trúc thư mục và quy trình biên dịch của Smarty
      */
@@ -149,20 +148,62 @@ abstract class BaseController
         $this->smarty->setCompileDir(ROOT_DIR . '/templates/templates_c');
 
         // Đăng ký hàm tùy biến trans() đồng bộ thẳng vào trong tệp tin View giao diện (.tpl)
-        // Hỗ trợ cả cơ chế đếm số nhiều nâng cao ngay ngoài mặt tiền Smarty
-        // Cú pháp sử dụng trong file tpl: {trans key="active_advisors_count" count=5}
         $this->smarty->registerPlugin('function', 'trans', function ($params) {
             $key = $params['key'] ?? '';
             $count = isset($params['count']) ? (int)$params['count'] : null;
             $replace = [];
-            
+
             if ($count !== null) {
                 $replace['%count%'] = $count;
             }
-            
-            // 🔥 ĐÃ ĐỒNG BỘ: Tuân thủ cấu pháp chuẩn id, parameters, domain, locale
-            return $this->translator->trans($key, $replace, 'messages', $this->currentLang);
+
+            // Hỗ trợ tham số default dự phòng trực tiếp ngoài thẻ Smarty 4 để triệt tiêu lỗi ??
+            $result = $this->translator->trans($key, $replace, 'messages', $this->currentLang);
+            return $result !== $key ? $result : ($params['default'] ?? $key);
         });
+
+        // --- ⚡ PHÂN KHU ĐỒNG BỘ: NẠP CACHE CẤU HÌNH HỆ THỐNG SIÊU TỐC 0MS ---
+        $siteSettings = [];
+        $cacheSettingFile = ROOT_DIR . '/config/site_settings.json';
+        $loadedFromCache = false;
+
+        // MÀNG LỌC 1: Ưu tiên bốc thẳng từ file đệm tĩnh JSON (Triệt tiêu hoàn toàn gánh nặng truy vấn DB)
+        if (is_file($cacheSettingFile)) {
+            $jsonContent = @file_get_contents($cacheSettingFile);
+            if (!empty($jsonContent)) {
+                $cachedData = json_decode($jsonContent, true);
+                if (is_array($cachedData)) {
+                    foreach ($cachedData as $key => $translations) {
+                        $siteSettings[$key] = $translations[$this->currentLang] ?? ($translations['en'] ?? '');
+                    }
+                    $loadedFromCache = true;
+                }
+            }
+        }
+
+        // MÀNG LỌC 2: FALLBACK TỰ ĐỘNG - Chỉ chọc MySQL nếu file cache bị mất hoặc hỏng dữ liệu
+        if (!$loadedFromCache) {
+            try {
+                if (\App\App::has('db')) {
+                    $capsule = \App\App::get('db');
+                    $rawSettings = $capsule::table('site_settings')->get();
+                    $exportCache = [];
+
+                    foreach ($rawSettings as $row) {
+                        $translations = json_decode($row->setting_value, true) ?? [];
+                        $exportCache[$row->setting_key] = $translations;
+                        $siteSettings[$row->setting_key] = $translations[$this->currentLang] ?? ($translations['en'] ?? '');
+                    }
+
+                    // Tự động kết xuất ghi đè lại file json đệm cứu hộ hạ tầng cho các request sau
+                    if (!empty($exportCache)) {
+                        @file_put_contents($cacheSettingFile, json_encode($exportCache, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+                    }
+                }
+            } catch (\Throwable $e) {
+                // Tấm khiên bảo mật: Tránh sập giao diện nếu DB chưa chạy migration dựng bảng
+            }
+        }
 
         // ĐỒNG BỘ TÀI NGUYÊN ĐỘNG XUẤT RA VIEW SMARTY (TỐI ƯU HẠ TẦNG TUYỆT ĐỐI)
         $config = require ROOT_DIR . '/config/app.php';
@@ -184,7 +225,10 @@ abstract class BaseController
 
             // 5. Tên Cookie Múi giờ động đã bóc tách cờ hiệu bảo mật :1 / :0
             'cookie_tz_name'      => $config['security']['cookies_ux']['timezone'] ?? 'va_tz',
-            'client'              => \App\App::get('client_info')
+            'client'              => \App\App::get('client_info'),
+
+            // 6. 🔥 PHỦ SÓNG TOÀN SÀN: Mảng cấu hình động Meta SEO đọc 0ms từ tệp JSON đệm tĩnh
+            'site'                => $siteSettings
         ]);
 
         // Đăng ký View Smarty vào App Core Registry
@@ -193,9 +237,6 @@ abstract class BaseController
 
     /**
      * Hàm hỗ trợ nhanh (Helper Method) để render giao diện ngắn gọn trong Controller con
-     *
-     * @param string $templateName Tên tệp giao diện (Ví dụ: 'home/index.tpl')
-     * @param array $data Mảng dữ liệu muốn truyền ra màn hình
      */
     protected function render(string $templateName, array $data = []): void
     {

@@ -1,0 +1,22 @@
+{
+    "site_name": {
+        "en": "VietAdvisor - Expat Directory",
+        "vi": "VietAdvisor - Danh bạ Chuyên gia",
+        "ru": "VietAdvisor - Справочник Экспатов"
+    },
+    "site_description": {
+        "en": "The ultimate platform connecting expats with certified legal, visa, and relocation specialists in Vietnam.",
+        "vi": "Nền tảng tối tân kết nối người nước ngoài với các chuyên gia cấp cao về pháp lý, thị thực và định cư tại Việt Nam.",
+        "ru": "Превосходная платформа, объединяющая экспатов с сертифицированными специалистами по вопросам права, виз и иммиграции во Вьетнаме."
+    },
+    "site_hotline": {
+        "en": "+84 90 123 4567",
+        "vi": "+84 90 123 4567",
+        "ru": "+84 90 123 4567"
+    },
+    "site_contact_email": {
+        "en": "support@vietadvisor.net",
+        "vi": "support@vietadvisor.net",
+        "ru": "support@vietadvisor.net"
+    }
+}

@@ -4,7 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{$page_title|default:"VietAdvisor Platform"}</title>
+
+    <!-- 🌐 TỰ ĐỘNG GHÉP TIÊU ĐỀ TRANG CON VỚI TÊN WEBSITE TỔNG ĐỘNG TỪ BỘ ĐỆM STATIC CACHE -->
+    <title>{if !empty($page_title)}{$page_title} | {/if}{$site.site_name|default:"VietAdvisor"}</title>
+
+    <!-- 🌐 THẺ META SEO TỰ ĐỘNG THAY ĐỔI CHỮ THEO ĐÚNG NGÔN NGỮ BẢN XỨ ĐỌC SIÊU TỐC 0MS -->
+    <meta name="description" content="{$site.site_description|default:""}">
 
     <!-- 🚀 HẠ TẦNG BIỂU TƯỢNG ĐA NỀN TẢNG ĐỒNG BỘ COOKIE-FREE DOMAIN -->
     <link rel="icon" type="image/png" href="{$assets_url}images/favicon-96x96.png" sizes="96x96" />
@@ -103,14 +108,16 @@
 
     <!-- 🌐 PHẦN 1: HEADER ĐẦU TRANG DÙNG CHUNG -->
     <header>
-        <h1>{trans key="homepage_welcome"}</h1>
-        <p>{trans key="homepage_subtitle"}</p>
+        <!-- Bốc dữ liệu tên và mô tả website linh hoạt theo ngôn ngữ từ file site_settings.json -->
+        <h1>{$site.site_name|default:"VietAdvisor"}</h1>
+        <p>{$site.site_description|default:""}</p>
     </header>
 
     <div class="container">
         <!-- 🌐 PHẦN 2: BỘ CHUYỂN ĐỔI NGÔN NGỮ QUY HOẠCH TRÊN LAYOUT MẸ -->
         <div class="lang-switch">
-            <span>{trans key="switch_language"}:</span>
+            <!-- Bọc lót tham số default chuẩn Smarty 4 plugin để chặn đứng lỗi biên dịch cú pháp -->
+            <span>{trans key="switch_language" default="Language"}:</span>
             <span class="active-lang">{$current_lang|upper}</span>
 
             {foreach from=$supported_languages key=lang_code item=subdomain}
@@ -131,7 +138,7 @@
 
     <!-- 🌐 PHẦN 4: FOOTER CHÂN TRANG DÙNG CHUNG -->
     <footer>
-        <p>&copy; {$smarty.now|date_format:"%Y"} VietAdvisor Platform. All rights reserved.</p>
+        <p>&copy; {$smarty.now|date_format:"%Y"} {$site.site_name|default:"VietAdvisor"}. All rights reserved.</p>
     </footer>
 
 </body>

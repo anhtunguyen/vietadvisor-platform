@@ -21,7 +21,7 @@ articles_found: "{0} Hiện chưa có bài viết nào được xuất bản t�
 # Phân khu 4: Phân hệ tài khoản và đăng nhập (Authentication UX)
 account_zone: "Khu vực tài khoản"
 account_zone_desc: "Đăng nhập hệ thống để quản lý hồ sơ chuyên gia hoặc kết nối sâu với cộng đồng."
-login_btn: "Đăng nhập ngay"
+login_cta_btn: "Đăng Nhập Ngay"
 
 # ==============================================================================
 # 🛡️ PHÂN KHU 5: BIỂU MẪU CẢNH BÁO TRANG LỖI HỆ THỐNG (CORE SYSTEM ERRORS)
@@ -42,3 +42,9 @@ return_homepage: "Về trang chủ"
 # ==============================================================================
 # Sử dụng dải đếm {0,Inf} và bọc biến đếm bằng ký tự %count% chuẩn hóa
 active_advisors_count: "[0,Inf] %count% chuyên gia đang trực tuyến"
+
+login_form_btn: "Đăng Nhập"
+remember_me_label: "Ghi nhớ đăng nhập trên thiết bị này"
+back_to_home: "Quay lại Trang Chủ"
+error_empty_fields: "Vui lòng điền đầy đủ tất cả các trường dữ liệu."
+error_invalid_credentials: "Địa chỉ email hoặc mật khẩu không chính xác."

@@ -20,7 +20,7 @@ articles_found: "{0} На данный момент в этом разделе �
 # Phân khu 4: Phân hệ tài khoản và đăng nhập (Authentication UX)
 account_zone: "Личный кабинет"
 account_zone_desc: "Войдите в систему для управления профилем эксперта или глубокого взаимодействия с сообществом."
-login_btn: "Войти сейчас"
+login_cta_btn: "Войти сейчас"
 
 # ==============================================================================
 # 🛡️ PHÂN KHU 5: BIỂU MẪU CẢNH BÁO TRANG LỖI HỆ THỐNG (CORE SYSTEM ERRORS)
@@ -45,3 +45,9 @@ return_homepage: "На главную"
 # - Nhánh 3 (Tất cả các trường hợp còn lại): 0, 5-20, 25-30... экспертов
 # Chuỗi YAML phân tách bằng ký tự gạch đứng | tuân thủ nghiêm ngặt chuẩn Symfony Translator
 active_advisors_count: "%count% эксперт онлайн|%count% эксперта онлайн|%count% экспертов онлайн"
+
+login_form_btn: "Войти"
+remember_me_label: "Запомнить меня на этом устройстве"
+back_to_home: "Назад на Главную"
+error_empty_fields: "Пожалуйста, заполните все поля."
+error_invalid_credentials: "Неверный адрес электронной почты или пароль."

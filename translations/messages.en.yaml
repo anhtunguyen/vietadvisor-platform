@@ -20,7 +20,7 @@ articles_found: "{0} There are currently no articles published in this section.|
 # Phân khu 4: Phân hệ tài khoản và đăng nhập (Authentication UX)
 account_zone: "Account Dashboard"
 account_zone_desc: "Access your dashboard to manage advisor profiles or interact deeply with the expat community."
-login_btn: "Login Now"
+login_cta_btn: "Login Now"
 
 # ==============================================================================
 # 🛡️ PHÂN KHU 5: BIỂU MẪU CẢNH BÁO TRANG LỖI HỆ THỐNG (CORE SYSTEM ERRORS)
@@ -41,3 +41,9 @@ return_homepage: "Return Homepage"
 # ==============================================================================
 # Cú pháp chia 2 khoảng nhị phân: {1} cho số ít và các dải số còn lại lọt vào ]1,Inf]
 active_advisors_count: "{1} %count% advisor is online|[-Inf,0] %count% advisors are online|]1,Inf] %count% advisors are online"
+
+login_form_btn: "Login"
+remember_me_label: "Remember me on this device"
+back_to_home: "Back to Homepage"
+error_empty_fields: "Please fill in all fields."
+error_invalid_credentials: "Invalid email or password."

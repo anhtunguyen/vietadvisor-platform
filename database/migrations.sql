@@ -103,3 +103,13 @@ CREATE TABLE `user_remember_tokens` (
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
     INDEX `idx_selector` (`selector`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 9. Khởi tạo Bảng quản lý Cấu hình hệ thống động đa ngôn ngữ
+CREATE TABLE `site_settings` (
+    `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `setting_key` VARCHAR(100) NOT NULL UNIQUE,
+    -- Trường 'value' dạng JSON lưu trữ dữ liệu dịch thuật (Ví dụ: {"vi":"Tên Việt", "en":"Tên Anh", "ru":"Tên Nga"})
+    `setting_value` JSON NOT NULL,
+    `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX `idx_settings_key` (`setting_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -39,3 +39,7 @@
 ## 🗄️ 7. DATABASE STRUCTURE & AUTOMATION ENGINE
 - **Schema Blueprints**: Managed via `database/migrations.sql` and `database/seeders.sql` supporting decoupled multilingual split translations.
 - **Automation Service**: Triggered safely via `\App\Services\DatabaseBuilder::run()` using core PDO registry integration.
+
+## 🔐 8. AUTHENTICATION MODULE
+- **Sub-routing**: Isolated under `src/Modules/Auth/routes.php`.
+- **Controller Action**: `Auth\Controllers\AuthController` manages dynamic login, logout lifecycle, session fingerprint hashing, and interfaces with `RememberMeService` for cryptographic token storage.
